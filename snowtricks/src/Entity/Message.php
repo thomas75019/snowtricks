@@ -24,7 +24,7 @@ class Message
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="string", length=1, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="content", type="text", nullable=false)
      */
     private $content;
 
@@ -54,6 +54,11 @@ class Message
      * })
      */
     private $user;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
