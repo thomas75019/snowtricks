@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,12 +34,13 @@ class TrickController extends AbstractController
 
     /**
      * @var Request $request Request
+     * @var Slugger $slugger Slugger service
      *
      * @return Response
      *
      * @Route("/new", name="trick_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Slugger $slugger): Response
     {
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
@@ -46,10 +48,15 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $slug = $slugger->slugger($trick->getName());
+
+            $trick->setSlug($slug);
+            $trick->setUser($this->getUser());
+
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            $this->addFlash('notice', 'Le nouveau trick à bien été ajouté');
+            $this->addFlash('success', 'Le nouveau trick à bien été ajouté');
 
             return $this->redirectToRoute('trick_index');
         }
