@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,6 +48,8 @@ class TrickController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
             $entityManager->flush();
+
+            $this->addFlash('notice', 'Le nouveau trick à bien été ajouté');
 
             return $this->redirectToRoute('trick_index');
         }
@@ -100,11 +103,11 @@ class TrickController extends AbstractController
      * @var Request $request Request
      * @var Trick   $trick   Trick entity
      *
-     * @return Response
+     * @return RedirectResponse
      *
      * @Route("/{id}", name="trick_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Trick $trick): Response
+    public function delete(Request $request, Trick $trick): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
