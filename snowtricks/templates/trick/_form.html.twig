@@ -1,7 +1,11 @@
 <div class="container">
     <div class="row">
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.description) }}
+        {{ form_widget(form.images.vars.prototype) }}
+        <div class="images" data-prototype="">
+        </div>
         <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
     </div>

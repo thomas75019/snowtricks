@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Image
@@ -27,6 +28,14 @@ class Image
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\File(mimeTypes={"images/gif", "images/jpeg", "images/jpg", "images/png"},
+     *              mimeTypesMessage = "Veuillez choisir une image au  format gif, jpeg, jpg, png"
+     * )
+     */
+    private $file;
 
     /**
      * @var \Trick
@@ -65,6 +74,22 @@ class Image
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
     }
 
 

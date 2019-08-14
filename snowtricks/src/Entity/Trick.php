@@ -64,6 +64,27 @@ class Trick
      */
     private $description;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="trick", cascade={"persist", "remove"})
+     */
+    private $images;
+
+    /**
+     * @return mixed
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @param mixed $images
+     */
+    public function setImages($images): void
+    {
+        $this->images = $images;
+    }
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
