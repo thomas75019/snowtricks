@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Service\Handler\ImagesHandler;
 use App\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,18 +35,23 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @var Request $request Request
-     * @var Slugger $slugger Slugger service
+     * @var Request       $request Request
+     * @var Slugger       $slugger Slugger service
+     * @var ImagesHandler $image
      *
      * @return Response
      *
      * @Route("/new", name="trick_new", methods={"GET","POST"})
+     * @Template()
      */
-    public function new(Request $request, Slugger $slugger): Response
+    public function new(Request $request, Slugger $slugger, ImagesHandler $handler): Response
     {
         $trick = new Trick();
+        $images_path = $this->getParameter('images_path');
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -52,6 +59,7 @@ class TrickController extends AbstractController
 
             $trick->setSlug($slug);
             $trick->setUser($this->getUser());
+            $handler->addImages($trick, $images_path);
 
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -107,17 +115,20 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @var Request $request Request
-     * @var Trick   $trick   Trick entity
+     * @var Request       $request Request
+     * @var Trick         $trick   Trick entity
+     * @var ImagesHandler $handler Images Handler
      *
      * @return RedirectResponse
      *
      * @Route("/{id}", name="trick_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Trick $trick): RedirectResponse
+    public function delete(Request $request, Trick $trick, ImagesHandler $handler): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
+            $images_path = $this->getParameter('images_path');
             $entityManager = $this->getDoctrine()->getManager();
+            $handler->deleteImages($trick->getImages(), $images_path);
             $entityManager->remove($trick);
             $entityManager->flush();
         }
