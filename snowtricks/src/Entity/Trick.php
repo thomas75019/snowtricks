@@ -74,6 +74,27 @@ class Trick
     private $images;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", cascade={"persist", "remove"})
+     */
+    private $videos;
+
+    /**
+     * @return mixed
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    /**
+     * @param mixed $videos
+     */
+    public function setVideos($videos): void
+    {
+        $this->videos = $videos;
+    }
+
+    /**
      * @return mixed
      */
     public function getImages()
@@ -97,6 +118,7 @@ class Trick
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     /**

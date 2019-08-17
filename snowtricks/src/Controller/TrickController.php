@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Service\Handler\ImagesHandler;
+use App\Service\Handler\VideoHandler;
 use App\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -37,14 +38,15 @@ class TrickController extends AbstractController
     /**
      * @var Request       $request Request
      * @var Slugger       $slugger Slugger service
-     * @var ImagesHandler $image
+     * @var ImagesHandler $images  Image Handler service
+     * @var VideoHandler  $videos  Video Handler service
      *
      * @return Response
      *
      * @Route("/new", name="trick_new", methods={"GET","POST"})
      * @Template()
      */
-    public function new(Request $request, Slugger $slugger, ImagesHandler $handler): Response
+    public function new(Request $request, Slugger $slugger, ImagesHandler $images, VideoHandler $videos): Response
     {
         $trick = new Trick();
         $images_path = $this->getParameter('images_path');
@@ -59,7 +61,8 @@ class TrickController extends AbstractController
 
             $trick->setSlug($slug);
             $trick->setUser($this->getUser());
-            $handler->addImages($trick, $images_path);
+            $images->addImages($trick, $images_path);
+            $videos->addVideos($trick);
 
             $entityManager->persist($trick);
             $entityManager->flush();

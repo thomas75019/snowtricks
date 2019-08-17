@@ -32,7 +32,7 @@ class ImagesHandler
      *
      * @return void
      */
-    public function addImages(Trick $trick, $images_path)
+    public function addImages(Trick $trick, $images_path) : void
     {
         foreach ($trick->getImages() as $image) {
             if($image->getName() == null  && $image->getFile() != null){
@@ -56,7 +56,7 @@ class ImagesHandler
      *
      * @return void
      */
-    public function deleteImages($images, $image_path)
+    public function deleteImages($images, $image_path) : void
     {
         foreach ($images as $image) {
             $this->filesystem->remove($image_path . '/'  .$image->getFile());
