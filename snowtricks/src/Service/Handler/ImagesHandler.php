@@ -25,6 +25,7 @@ class ImagesHandler
     }
 
     /**
+     *
      * Handle images and set their name
      *
      * @param Trick $trick
@@ -51,15 +52,15 @@ class ImagesHandler
 
 
     /**
-     * @param $images
+     * @param $trick      $trick
      * @param $image_path
      *
      * @return void
      */
-    public function deleteImages($images, $image_path) : void
+    public function deleteImages(Trick $trick, $image_path) : void
     {
-        foreach ($images as $image) {
-            $this->filesystem->remove($image_path . '/'  .$image->getFile());
+        foreach ($trick->getImages() as $image) {
+            $this->filesystem->remove($image_path . '/'  .$image->getName());
         }
 
         return;

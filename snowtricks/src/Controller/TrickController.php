@@ -131,7 +131,7 @@ class TrickController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->request->get('_token'))) {
             $images_path = $this->getParameter('images_path');
             $entityManager = $this->getDoctrine()->getManager();
-            $handler->deleteImages($trick->getImages(), $images_path);
+            $handler->deleteImages($trick, $images_path);
             $entityManager->remove($trick);
             $entityManager->flush();
         }
