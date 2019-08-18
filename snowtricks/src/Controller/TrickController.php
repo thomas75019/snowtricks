@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Entity\Message;
+use App\Form\MessageType;
 use App\Form\TrickType;
 use App\Service\Handler\ImagesHandler;
 use App\Service\Handler\VideoHandler;
@@ -30,8 +32,9 @@ class TrickController extends AbstractController
             ->getRepository(Trick::class)
             ->findBy([], ['id' => 'DESC'], $limit = 10 , $offset = 0);
 
+
         return $this->render('trick/index.html.twig', [
-            'tricks' => $tricks,
+            'tricks' => $tricks
         ]);
     }
 
@@ -87,8 +90,60 @@ class TrickController extends AbstractController
      */
     public function show(Trick $trick): Response
     {
+        $message = new Message();
+        $messages = $this->getDoctrine()->getRepository(Message::class)->findBy(
+            [
+                'trick' => $trick
+            ],
+            [
+                'id' => 'DESC'
+            ]
+        );
+
+        $form = $this->createForm(MessageType::class, $message,
+            [
+                'action' => $this->generateUrl('message_new',
+                    [
+                        'slug' => $trick->getSlug()
+                    ]
+                )
+            ]
+        );
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
+            'messages' => $messages,
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
+    /**
+     * @var Request $request
+     *
+     * @return Response
+     *
+     * @Route("/{slug}/new/message", name="message_new", methods={"GET","POST"})
+     */
+    public function newMessage(Request $request, Trick $trick): Response
+    {
+        $message = new Message();
+        $form = $this->createForm(MessageType::class, $message);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $message->setTrick($trick);
+            $message->setUser($this->getUser());
+            $entityManager->persist($message);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('message_index');
+        }
+
+        return $this->render('message/new.html.twig', [
+            'message' => $message,
+            'form' => $form->createView(),
         ]);
     }
 
