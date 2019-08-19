@@ -138,7 +138,7 @@ class TrickController extends AbstractController
             $entityManager->persist($message);
             $entityManager->flush();
 
-            return $this->redirectToRoute('message_index');
+            return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
 
         return $this->render('message/new.html.twig', [
