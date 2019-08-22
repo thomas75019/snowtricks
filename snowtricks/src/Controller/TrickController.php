@@ -156,6 +156,7 @@ class TrickController extends AbstractController
      * @return Response
      *
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, Trick $trick, VideoHandler $video): Response
     {
