@@ -10,6 +10,7 @@ use App\Service\Handler\ImagesHandler;
 use App\Service\Handler\VideoHandler;
 use App\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +48,7 @@ class TrickController extends AbstractController
      * @return Response
      *
      * @Route("/new", name="trick_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      * @Template()
      */
     public function new(Request $request, Slugger $slugger, ImagesHandler $images, VideoHandler $videos): Response

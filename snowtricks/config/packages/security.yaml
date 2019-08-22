@@ -1,7 +1,20 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+        backend_users:
+            memory:
+                users:
+                    john_admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$EZCAbR4AR85G5sFQmOXUBA$F7cussMuRv64gKVdrwkEgKX/ZfdtyG01s7oYkrjz1/M',roles: ['ROLE_ADMIN']}
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

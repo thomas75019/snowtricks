@@ -3,100 +3,59 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User
- *
- * @ORM\Table(name="user")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=50, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=50, nullable=false)
-     */
-    private $password;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_activated", type="boolean", nullable=false)
+     * @ORM\Column(type="json")
      */
-    private $isActivated = '0';
+    private $roles = [];
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="role", type="string", length=20, nullable=false)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
-    private $role;
+    private $password;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="activation_token", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $activationToken;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="photo", type="string", length=255, nullable=false)
+     * @ORM\Column(type="boolean")
+     */
+    private $is_activated;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $activation_token;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      */
     private $photo;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     public function getEmail(): ?string
@@ -111,38 +70,107 @@ class User
         return $this;
     }
 
-    public function getIsActivated(): ?bool
+
+    public function __construct()
     {
-        return $this->isActivated;
+        $this->is_activated = false;
+        $this->activation_token = md5(uniqid());
+        $this->photo = 'test';
     }
 
-    public function setIsActivated(bool $isActivated): self
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        $this->isActivated = $isActivated;
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getRole(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
-        return $this->role;
+        return (string) $this->password;
     }
 
-    public function setRole(string $role): self
+    public function setPassword(string $password): self
     {
-        $this->role = $role;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->is_activated;
+    }
+
+    public function setIsActivated(bool $is_activated): self
+    {
+        $this->is_activated = $is_activated;
 
         return $this;
     }
 
     public function getActivationToken(): ?string
     {
-        return $this->activationToken;
+        return $this->activation_token;
     }
 
-    public function setActivationToken(string $activationToken): self
+    public function setActivationToken(string $activation_token): self
     {
-        $this->activationToken = $activationToken;
+        $this->activation_token = $activation_token;
 
         return $this;
     }
@@ -158,6 +186,4 @@ class User
 
         return $this;
     }
-
-
 }
