@@ -6,12 +6,14 @@ use App\Entity\Trick;
 use App\Entity\Message;
 use App\Form\MessageType;
 use App\Form\TrickType;
+use App\Repository\TrickRepository;
 use App\Service\Handler\ImagesHandler;
 use App\Service\Handler\VideoHandler;
 use App\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -197,4 +199,18 @@ class TrickController extends AbstractController
 
         return $this->redirectToRoute('trick_index');
     }
+
+    /**
+     * @Route("/show_more/{id}", name="show_more", methods={"GET"})
+     */
+    public function showMore() : Response
+    {
+        $tricks = $this->getDoctrine()
+            ->getRepository(Trick::class)
+            ->findBy([], ['id' => 'DESC'], $limit = 10 , $offset = 0);
+
+        return new JsonResponse($tricks);
+    }
+
+
 }

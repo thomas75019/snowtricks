@@ -17,10 +17,10 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="body">
         {% for trick in tricks %}
             <tr>
-                <td>{{ trick.id }}</td>
+                <td class="id">{{ trick.id }}</td>
                 <td>{{ trick.name }}</td>
                 <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}</td>
                 <td>{{ trick.updatedAt ? trick.updatedAt|date('Y-m-d') : '' }}</td>
@@ -35,9 +35,41 @@
             <tr>
                 <td colspan="7">no records found</td>
             </tr>
+
         {% endfor %}
+
+        <button class="show_more">Voir plus</button>
         </tbody>
     </table>
 
     <a href="{{ path('trick_new') }}">Create new</a>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let last_id = $('.id').last().text();
+        console.log(last_id);
+        $(".show_more").click(function(){
+                $.ajax({
+                    url : '/show_more/' + last_id, // La ressource ciblée
+                    type: 'GET',
+
+                    success : function(data) { // code_html contient le HTML renvoyé
+                        console.log(data);
+
+                        /*$.each(data, function (i, item) {
+                            $('.body').append('<tr><td>' + item.name + '</td></tr>');
+                        });*/
+                    },
+                    error : function () {
+                        alert('Une erreur');
+                    }
+                });
+
+        });
+
+
+    </script>
 {% endblock %}
