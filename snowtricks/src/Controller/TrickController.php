@@ -140,7 +140,7 @@ class TrickController extends AbstractController
             $entityManager->persist($message);
             $entityManager->flush();
 
-            return $this->redirectToRoute('message_index');
+            return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
 
         return $this->render('message/new.html.twig', [
@@ -157,12 +157,13 @@ class TrickController extends AbstractController
      *
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Trick $trick): Response
+    public function edit(Request $request, Trick $trick, VideoHandler $video): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $video->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('trick_index');

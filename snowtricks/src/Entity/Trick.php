@@ -79,6 +79,27 @@ class Trick
     private $videos;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="trick", cascade={"persist", "remove"})
+     */
+    private $messages;
+
+    /**
+     * @return mixed
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @param mixed $messages
+     */
+    public function setMessages($messages): void
+    {
+        $this->messages = $messages;
+    }
+
+    /**
      * @return mixed
      */
     public function getVideos()
