@@ -201,15 +201,26 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/show_more/{id}", name="show_more", methods={"GET"})
+     * @Route("/show_more/{id}", name="show_more")
      */
-    public function showMore() : Response
+    public function showMore(TrickRepository $repository, Request $request)
     {
-        $tricks = $this->getDoctrine()
-            ->getRepository(Trick::class)
-            ->findBy([], ['id' => 'DESC'], $limit = 10 , $offset = 0);
+        $last_id = $request->get('id');
+        $tricks = $repository->showMore($last_id);
 
-        return new JsonResponse($tricks);
+        $json = array();
+        $index = 0;
+        foreach ($tricks as $trick)
+        {
+            $temp = array(
+                'id' => $trick->getId(),
+                'name' => $trick->getName(),
+            );
+
+            $json[$index++] = $temp;
+
+        }
+       return new JsonResponse($json);
     }
 
 

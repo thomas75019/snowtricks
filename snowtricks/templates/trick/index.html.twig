@@ -53,22 +53,27 @@
         console.log(last_id);
         $(".show_more").click(function(){
                 $.ajax({
-                    url : '/show_more/' + last_id, // La ressource ciblée
-                    type: 'GET',
+                    url : '/show_more/' + last_id,
+                    type: 'POST',
+                    success : function(data) {
 
-                    success : function(data) { // code_html contient le HTML renvoyé
-                        console.log(data);
-
-                        /*$.each(data, function (i, item) {
-                            $('.body').append('<tr><td>' + item.name + '</td></tr>');
-                        });*/
+                        for(i = 0; i < data.length; i++) {
+                            let trick = data[i];
+                            $('.body').append('<tr><td class="id">' + trick['id'] + '</td>' +
+                                '<td>' + trick['name'] + '</td></tr>')
+                        }
+                        last_id = $('.id').last().text();
                     },
                     error : function () {
                         alert('Une erreur');
                     }
+
                 });
 
         });
+
+
+
 
 
     </script>
