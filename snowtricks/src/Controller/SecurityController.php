@@ -2,11 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use function Symfony\Component\Debug\Tests\testHeader;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+/**
+ * Class SecurityController
+ * @package App\Controller
+ */
 class SecurityController extends AbstractController
 {
     /**
@@ -25,6 +33,28 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @param Request $request ServerRequest
+     *
+     * @return Response
+     *
+     * @Route("/activate/{token}", name="activate_account")
+     */
+    public function activateAccount(Request $request) : Response
+    {
+        $token = $request->get('token');
+
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+            'activation_token' => $token
+        ]);
+
+        $user->setIsActivated(true);
+        $this->getDoctrine()->getManager()->flush();
+        $this->addFlash('success', 'Votre compte à bien été activé');
+
+        return $this->redirectToRoute('trick_index');
     }
 
     /**

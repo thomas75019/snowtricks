@@ -1,0 +1,5 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ url('activate_account', {'token': token}) }}">Activer son compte</a>
+{% endblock %}
