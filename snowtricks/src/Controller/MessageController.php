@@ -18,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class MessageController extends AbstractController
 {
     /**
+     * @var Trick $trick
+     *
      * @return object[]
      */
     public function getAll(Trick $trick)
@@ -38,6 +40,7 @@ class MessageController extends AbstractController
 
     /**
      * @var Request $request
+     * @var Trick   $trick
      *
      * @return Response
      *

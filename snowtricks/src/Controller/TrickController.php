@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
 
 /**
  * @Route("/")
@@ -124,6 +125,7 @@ class TrickController extends AbstractController
 
     /**
      * @var Request $request
+     * @var Trick   $trick
      *
      * @return Response
      *
@@ -152,8 +154,9 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @var Request $request Request
-     * @var Trick   $trick   Trick entity
+     * @param Request      $request Request
+     * @param Trick        $trick   Trick entity
+     * @param VideoHandler $video   Video Handler
      *
      * @return Response
      *
@@ -201,9 +204,14 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @param TrickRepository $repository Trick repository
+     * @param Request         $request    ServerRequest
+     *
+     * @return JsonResponse
+     *
      * @Route("/show_more/{id}", name="show_more")
      */
-    public function showMore(TrickRepository $repository, Request $request)
+    public function showMore(TrickRepository $repository, Request $request) : JsonResponse
     {
         $last_id = $request->get('id');
         $tricks = $repository->showMore($last_id);

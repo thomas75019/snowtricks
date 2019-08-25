@@ -18,8 +18,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * @param AuthenticationUtils $authenticationUtils
      *
      * @Route("/login", name="app_login")
+     *
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -58,6 +61,8 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @throws \Exception
+     *
      * @Route("/logout", name="app_logout")
      */
     public function logout()
