@@ -25,6 +25,7 @@ class RegistrationController extends AbstractController
      * @param UserPasswordEncoderInterface $passwordEncoder Password Encoder
      * @param GuardAuthenticatorHandler    $guardHandler    Guard Handler
      * @param LoginFormAuthenticator       $authenticator   Authenticator
+     * @param \Swift_Mailer                $mailer          Mailer
      *
      * @return Response
      *
@@ -56,21 +57,15 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
+            $body = $this->renderView('email/activate_account.html.twig',
+                [
+                    'token' => $user->getActivationToken()
+                ]
+            );
 
-            $message = (new \Swift_Message('Activate you account'))
-                ->setFrom('tlarousse3@gmail.com')
-                ->setTo($user->getEmail())
-                ->setBody(
-                    $this->renderView('email/activate_account.html.twig',
-                        [
-                            'token' => $user->getActivationToken()
-                        ]
-                    ),
-                    'text/html'
-                );
+            $email = new ActivationEmail($mailer, $user->getEmail(), $body);
 
-            $mailer->send($message);
+            $email->sendActivationEmail();
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
