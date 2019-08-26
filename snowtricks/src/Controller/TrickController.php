@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Json;
 
 /**
- * @Route("/")
+ * @Route("/trick")
  */
 class TrickController extends AbstractController
 {

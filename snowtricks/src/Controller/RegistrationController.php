@@ -5,13 +5,15 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
-use App\Service\email\ActivationEmail;
+use App\Service\email\SecurityEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
 
 /**
  * Class RegistrationController
@@ -63,9 +65,9 @@ class RegistrationController extends AbstractController
                 ]
             );
 
-            $email = new ActivationEmail($mailer, $user->getEmail(), $body);
+            $email = new SecurityEmail($mailer, $user->getEmail(), $body, 'Activer votre compte');
 
-            $email->sendActivationEmail();
+            $email->send();
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -74,7 +76,7 @@ class RegistrationController extends AbstractController
                 'main' // firewall name in security.yaml
             );
         }
-
+        
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);

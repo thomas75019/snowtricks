@@ -53,7 +53,7 @@
         console.log(last_id);
         $(".show_more").click(function(){
                 $.ajax({
-                    url : '/show_more/' + last_id,
+                    url : 'trick/show_more/' + last_id,
                     type: 'POST',
                     success : function(data) {
 
