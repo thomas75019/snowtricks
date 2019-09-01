@@ -3,6 +3,10 @@
 {% block title %}Trick index{% endblock %}
 
 {% block body %}
+    <div id="scrollUp">
+        <a href="#top"><img src="{{ asset('assets/img/to_top.png') }}"/></a>
+    </div>
+
 <div class="container">
     <div class="row mt centered ">
         <div class="col-lg-4 col-lg-offset-4">
@@ -75,22 +79,24 @@
 
             });
 
-            $(function() {
 
-                $("a[href*='#']:not([href='#'])").click(function() {
-                    if (
-                        location.hostname == this.hostname
-                        && this.pathname.replace(/^\//,"") == location.pathname.replace(/^\//,"")
-                    ) {
-                        var anchor = $(this.hash);
-                        anchor = anchor.length ? anchor : $("[name=" + this.hash.slice(1) +"]");
-                        if ( anchor.length ) {
-                            $("html, body").animate( { scrollTop: anchor.offset().top }, 1500);
-                        }
-                    }
-                });
+            $(window).scroll(function () { //Fonction appelée quand on descend la page
+                if ($(this).scrollTop() > 200 ) {  // Quand on est à 200pixels du haut de page,
+                    $('#scrollUp').css('right','10px'); // Replace à 10pixels de la droite l'image
+                } else {
+                    $('#scrollUp').removeAttr('style'); // Enlève les attributs CSS affectés par javascript
+                }
+            });
+
+
+            $('a[href*="#"]').on('click', function() {
+                const page = $(this).attr('href');
+                const speed = 750;
+                $('html, body').animate( { scrollTop: $(page).offset().top }, speed );
+                return false;
             });
         })
+
 
 
 
