@@ -31,7 +31,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            $this->redirectToRoute('trick_index');
+            $this->redirectToRoute('index');
         }
 
         // get the login error if there is one
@@ -61,7 +61,7 @@ class SecurityController extends AbstractController
         $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'Votre compte à bien été activé');
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('index');
     }
 
     /**
@@ -114,7 +114,7 @@ class SecurityController extends AbstractController
 
         $this->addFlash('notice', 'Un email pour réinitialiser votre mot de passe a été envoyé');
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('index');
     }
 
     /**
@@ -175,14 +175,14 @@ class SecurityController extends AbstractController
 
             $this->addFlash('success', 'Votre mot de passe a bien été changé');
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('index');
 
         }
 
 
         $this->addFlash('erreur', 'erreur');
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('index');
     }
 
 

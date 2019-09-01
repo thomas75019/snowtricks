@@ -17,8 +17,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Json;
+use DateTime;
 
 /**
  * @Route("/trick")
@@ -34,7 +36,7 @@ class TrickController extends AbstractController
     {
         $tricks = $this->getDoctrine()
             ->getRepository(Trick::class)
-            ->findBy([], ['id' => 'DESC'], $limit = 10 , $offset = 0);
+            ->findBy([], ['id' => 'DESC'], $limit = 6 , $offset = 0);
 
 
         return $this->render('trick/index.html.twig', [
@@ -77,7 +79,7 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Le nouveau trick à bien été ajouté');
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('trick/new.html.twig', [
@@ -172,7 +174,7 @@ class TrickController extends AbstractController
             $video->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('trick/edit.html.twig', [
@@ -188,7 +190,7 @@ class TrickController extends AbstractController
      *
      * @return RedirectResponse
      *
-     * @Route("/{id}", name="trick_delete", methods={"DELETE"})
+     * @Route("/supprimer/{id}", name="trick_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Trick $trick, ImagesHandler $handler): RedirectResponse
     {
@@ -200,35 +202,52 @@ class TrickController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('index');
     }
 
     /**
      * @param TrickRepository $repository Trick repository
      * @param Request         $request    ServerRequest
      *
-     * @return JsonResponse
-     *
+     * @return Response
      * @Route("/show_more/{id}", name="show_more")
      */
-    public function showMore(TrickRepository $repository, Request $request) : JsonResponse
+    public function showMore(TrickRepository $repository, Request $request)
     {
         $last_id = $request->get('id');
         $tricks = $repository->showMore($last_id);
+        $size = count($tricks);
 
-        $json = array();
+
+
+       /*$json = array();
         $index = 0;
         foreach ($tricks as $trick)
         {
+            $date = $trick->getUpdatedAt() ? $trick->getUpdatedAt() : $trick->getCreatedAt();
+            $formatedDate = null;
+
+            if ($date instanceof \DateTime)
+            {
+                $formatedDate = $date->format('d-m-Y');
+            }
+
             $temp = array(
                 'id' => $trick->getId(),
                 'name' => $trick->getName(),
+                'slug' => $trick->getSlug(),
+                'messageLength' => count($trick->getMessages()),
+                'date' => $formatedDate,
+
             );
+
 
             $json[$index++] = $temp;
 
         }
-       return new JsonResponse($json);
+
+       return new JsonResponse($json);*/
+       return $this->render('trick/new_trick.html.twig', ['tricks' => $tricks, 'size' => $size]);
     }
 
 

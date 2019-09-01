@@ -3,74 +3,96 @@
 {% block title %}Trick index{% endblock %}
 
 {% block body %}
-    <h1>Trick index</h1>
+<div class="container">
+    <div class="row mt centered ">
+        <div class="col-lg-4 col-lg-offset-4">
+            <h3>Les Derniers Tricks</h3>
+            <hr>
+        </div>
+    </div>
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>Slug</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody class="body">
-        {% for trick in tricks %}
-            <tr>
-                <td class="id">{{ trick.id }}</td>
-                <td>{{ trick.name }}</td>
-                <td>{{ trick.createdAt ? trick.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ trick.updatedAt ? trick.updatedAt|date('Y-m-d') : '' }}</td>
-                <td>{{ trick.slug }}</td>
-                <td>{{ trick.description }}</td>
-                <td>
-                    <a href="{{ path('trick_show', {'slug': trick.slug}) }}">show</a>
-                    <a href="{{ path('trick_edit', {'id': trick.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-
+<div class="container">
+    <div class="row mt" class="tricks" id="tricks">
+         {% for trick in tricks %}
+        <div class="col-lg-4 col-md-4 col-xs-12 desc">
+            <a class="b-link-fade b-animate-go" href="{{ path('trick_show', {'slug': trick.slug}) }}"><img width="350" src="{{ asset('assets/img/portfolio/port04.jpg') }}" alt="" />
+                <div class="b-wrapper">
+                    <h4 class="b-from-left b-animate b-delay03">{{ trick.name }}</h4>
+                    <p class="b-from-right b-animate b-delay03">Voir Plus.</p>
+                </div>
+            </a>
+            <p>{{ trick.name }}t</p>
+            <hr>
+            <div class="align">
+                <div class="time"><i class="fa fa-comment-o"></i>
+                    {{ trick.messages|length }} | <i class="fa fa-calendar"></i>
+                    {{ trick.updatedAt  ? trick.createdAt|date("d/m/Y") : trick.createdAt|date("d/m/Y") }}
+                </div>
+                {% if app.user %}
+                <div class="form-delete" style="padding-bottom: 10px">
+                    {% include('trick/_delete_form.html.twig') %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="id" style="display: none">{{ trick.id }}</div>
+        </div>
         {% endfor %}
 
-        <button class="show_more">Voir plus</button>
-        </tbody>
-    </table>
-
-    <a href="{{ path('trick_new') }}">Create new</a>
-
+        <div class="row mt" id="new_tricks">
+        </div>
+        <!-- col-lg-4 -->
+        <div class="row centered" id="button_show_more">
+            <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus</button>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
-{% block javascripts %}
+{% block footer %}
+    {{ parent() }}
     <script>
-        let last_id = $('.id').last().text();
-        console.log(last_id);
-        $(".show_more").click(function(){
+        $(document).ready(function () {
+            let last_id = $('.id').last().text();
+            console.log(last_id);
+            $(document).on('click', '#show_more', function(){
                 $.ajax({
                     url : 'trick/show_more/' + last_id,
-                    type: 'POST',
+                    type: 'GET',
                     success : function(data) {
+                        $('#new_tricks').append(data)
+                        $("#button_show_more").remove()
 
-                        for(i = 0; i < data.length; i++) {
-                            let trick = data[i];
-                            $('.body').append('<tr><td class="id">' + trick['id'] + '</td>' +
-                                '<td>' + trick['name'] + '</td></tr>')
-                        }
                         last_id = $('.id').last().text();
                     },
-                    error : function () {
-                        alert('Une erreur');
-                    }
+                    error : function (error) {
+                        alert(error);
+                    },
+
 
                 });
 
-        });
+            });
+
+            $(function() {
+
+                $("a[href*='#']:not([href='#'])").click(function() {
+                    if (
+                        location.hostname == this.hostname
+                        && this.pathname.replace(/^\//,"") == location.pathname.replace(/^\//,"")
+                    ) {
+                        var anchor = $(this.hash);
+                        anchor = anchor.length ? anchor : $("[name=" + this.hash.slice(1) +"]");
+                        if ( anchor.length ) {
+                            $("html, body").animate( { scrollTop: anchor.offset().top }, 1500);
+                        }
+                    }
+                });
+            });
+        })
+
+
 
 
 
