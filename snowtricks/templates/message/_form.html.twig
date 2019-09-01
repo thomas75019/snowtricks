@@ -1,4 +1,4 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn" class="new_message" id="new_message">{{ button_label|default('Save') }}</button>
+    {{ form_widget(form.content) }}
+    <button class="btn btn-cta btn-lg" class="new_message" id="new_message" style="border-color: black; color: black">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
