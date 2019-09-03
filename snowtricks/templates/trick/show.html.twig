@@ -25,7 +25,22 @@
 
 {% block body %}
     <article>
+        {% if app.user %}
+            <div class="form-delete" style="font-size: 25px; width: 50%; float: right; margin: 0 auto;">
+                {% include('trick/_delete_form.html.twig') %}
+            </div>
+        {% endif %}
+        <div class="container">
+            <div class="row mt">
+                <div class="align">
+                    <div class="time">
+                        <em>{{ trick.updatedAt  ? trick.createdAt|date("d/m/Y") : trick.createdAt|date("d/m/Y") }}</em>
+                    </div>
+                </div>
+            </div>
+        </div>
         {{ trick.description }}
+
     </article>
 
     <hr style="margin: 5% 25% 5% 25%; ">
@@ -42,7 +57,7 @@
                     <div class="author-bio media">
                         <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('assets/img/to_top.png') }}" alt="Avatar"></div><!-- /.author-avatar -->
                         <div class="author-details media-body">
-                            <h3 class="name"><a href="#">{{ message.user.name }}</a></h3>
+                            <h3 class="name">{{ message.user.name }}</h3>
                             <p>
                                 {{ message.content }}
                             </p>
@@ -51,11 +66,44 @@
                 </div>
             </div>
         </div>
-
+        <div class="id">{{ message.id }}</div>
     {% endfor %}
+    <div id="new_messages">
+
+    </div>
+    <div class="row" id="button_show_more" style="width: 100px;">
+        <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus de messages</button>
+    </div>
+
 
 {% endblock %}
 
-{% block javascripts %}
+{% block footer %}
     {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            let last_id = $('.id').last().text();
+            console.log(last_id);
+            $(document).on('click', '#show_more', function(){
+                $.ajax({
+                    url : 'message/show_more/' + last_id,
+                    type: 'GET',
+                    success : function(data) {
+                        $('#new_messages').append(data)
+                        $("#show_more").remove()
+
+                        console.log(data)
+                        last_id = $('.id').last().text();
+                    },
+                    error : function () {
+                        $("#show_more").remove()
+                    },
+
+
+                });
+
+            });
+        })
+    </script>
 {% endblock %}
+

@@ -11,10 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\MessageRepository;
 
-/**
- * @Route("/message")
- */
+
 class MessageController extends AbstractController
 {
     /**
@@ -31,7 +30,7 @@ class MessageController extends AbstractController
                     'trick' => $trick
                 ],
                 'DESC',
-                $limit = 5,
+                $limit = 4,
                 $offset = 0
             );
 
@@ -44,7 +43,7 @@ class MessageController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/new", name="message_new_test", methods={"GET","POST"})
+     * @Route("/new/message", name="message_new_test", methods={"GET","POST"})
      */
     public function new(Request $request, Trick $trick): Response
     {
@@ -73,7 +72,7 @@ class MessageController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/{id}", name="message_show", methods={"GET"})
+     * @Route("/{id}/message", name="message_show", methods={"GET"})
      */
     public function show(Message $message): Response
     {
@@ -88,7 +87,7 @@ class MessageController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/{id}/edit", name="message_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit/message", name="message_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Message $message): Response
     {
@@ -113,7 +112,7 @@ class MessageController extends AbstractController
      *
      * @return Response
      *
-     * @Route("/{id}", name="message_delete", methods={"DELETE"})
+     * @Route("/{id}/message", name="message_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Message $message): Response
     {
@@ -124,5 +123,22 @@ class MessageController extends AbstractController
         }
 
         return $this->redirectToRoute('message_index');
+    }
+
+    /**
+     * @param MessageRepository $repository
+     * @param Request           $request
+     *
+     * @return Response
+     *
+     * @Route("trick/message/show_more/{id}", name="show_more_messages")
+     */
+    public function showMore(MessageRepository $repository, Request $request) : Response
+    {
+        $last_id = $request->get('id');
+        $messages = $repository->showMore($last_id);
+        $size = count($messages);
+
+        return $this->render('message/new_messages.html.twig', ['messages' => $messages, 'size' => $size]);
     }
 }

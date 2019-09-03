@@ -104,7 +104,8 @@ class TrickController extends AbstractController
             ],
             [
                 'id' => 'DESC'
-            ]
+            ],
+            $limit = 4
         );
 
         $form = $this->createForm(MessageType::class, $message,
@@ -219,34 +220,6 @@ class TrickController extends AbstractController
         $size = count($tricks);
 
 
-
-       /*$json = array();
-        $index = 0;
-        foreach ($tricks as $trick)
-        {
-            $date = $trick->getUpdatedAt() ? $trick->getUpdatedAt() : $trick->getCreatedAt();
-            $formatedDate = null;
-
-            if ($date instanceof \DateTime)
-            {
-                $formatedDate = $date->format('d-m-Y');
-            }
-
-            $temp = array(
-                'id' => $trick->getId(),
-                'name' => $trick->getName(),
-                'slug' => $trick->getSlug(),
-                'messageLength' => count($trick->getMessages()),
-                'date' => $formatedDate,
-
-            );
-
-
-            $json[$index++] = $temp;
-
-        }
-
-       return new JsonResponse($json);*/
        return $this->render('trick/new_trick.html.twig', ['tricks' => $tricks, 'size' => $size]);
     }
 
