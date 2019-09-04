@@ -131,12 +131,13 @@ class MessageController extends AbstractController
      *
      * @return Response
      *
-     * @Route("trick/message/show_more/{id}", name="show_more_messages")
+     * @Route("trick/message/show_more/{id}/{trick_id}", name="show_more_messages")
      */
     public function showMore(MessageRepository $repository, Request $request) : Response
     {
         $last_id = $request->get('id');
-        $messages = $repository->showMore($last_id);
+        $trick_id = $request->get('trick_id');
+        $messages = $repository->showMore($last_id, $trick_id);
         $size = count($messages);
 
         return $this->render('message/new_messages.html.twig', ['messages' => $messages, 'size' => $size]);

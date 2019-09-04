@@ -38,9 +38,8 @@ class TrickController extends AbstractController
             ->getRepository(Trick::class)
             ->findBy([], ['id' => 'DESC'], $limit = 6 , $offset = 0);
 
-
         return $this->render('trick/index.html.twig', [
-            'tricks' => $tricks
+            'tricks' => $tricks,
         ]);
     }
 
@@ -97,6 +96,8 @@ class TrickController extends AbstractController
      */
     public function show(Trick $trick): Response
     {
+        $images = $trick->getImages();
+        $videos = $trick->getVideos();
         $message = new Message();
         $messages = $this->getDoctrine()->getRepository(Message::class)->findBy(
             [
@@ -120,6 +121,8 @@ class TrickController extends AbstractController
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'messages' => $messages,
+            'images' => $images,
+            'videos' => $videos,
             'form' => $form->createView()
         ]);
     }

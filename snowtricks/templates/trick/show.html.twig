@@ -30,6 +30,22 @@
                 {% include('trick/_delete_form.html.twig') %}
             </div>
         {% endif %}
+
+        <div class="container" id="medias">
+                <div class="row">
+                    {% for image in images %}
+                        <figure class="col-md-4">
+                            <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
+                        </figure>
+                    {% endfor %}
+                    {% for video in videos %}
+                        <figure class="col-md-4">
+                            {{ video.embed|raw }}
+                        </figure>
+                    {% endfor %}
+                </div>
+        </div>
+
         <div class="container">
             <div class="row mt">
                 <div class="align">
@@ -38,6 +54,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
         {{ trick.description }}
 
@@ -58,6 +75,7 @@
                         <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('assets/img/to_top.png') }}" alt="Avatar"></div><!-- /.author-avatar -->
                         <div class="author-details media-body">
                             <h3 class="name">{{ message.user.name }}</h3>
+                            <span>Posté le {{ message.createdAt|date('d/m/Y') }}</span>
                             <p>
                                 {{ message.content }}
                             </p>
@@ -66,14 +84,15 @@
                 </div>
             </div>
         </div>
-        <div class="id">{{ message.id }}</div>
+        <div class="id" style="display: none">{{ message.id }}</div>
     {% endfor %}
     <div id="new_messages">
-
     </div>
+    {% if messages != null and messages|length == 4 %}
     <div class="row" id="button_show_more" style="width: 100px;">
         <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus de messages</button>
     </div>
+    {% endif %}
 
 
 {% endblock %}
@@ -86,13 +105,12 @@
             console.log(last_id);
             $(document).on('click', '#show_more', function(){
                 $.ajax({
-                    url : 'message/show_more/' + last_id,
+                    url : 'message/show_more/' + last_id + '/' + {{ trick.id }},
                     type: 'GET',
                     success : function(data) {
                         $('#new_messages').append(data)
                         $("#show_more").remove()
 
-                        console.log(data)
                         last_id = $('.id').last().text();
                     },
                     error : function () {

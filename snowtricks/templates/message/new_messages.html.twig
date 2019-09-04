@@ -6,6 +6,7 @@
                     <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('assets/img/to_top.png') }}" alt="Avatar"></div><!-- /.author-avatar -->
                     <div class="author-details media-body">
                         <h3 class="name">{{ message.user.name }}</h3>
+                        <span>Posté le {{ message.createdAt|date('d/m/Y') }}</span>
                         <p>
                             {{ message.content }}
                         </p>
