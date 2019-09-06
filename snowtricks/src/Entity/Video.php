@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * Video
@@ -26,7 +27,6 @@ class Video
      * @var string
      *
      * @ORM\Column(name="embed", type="string", length=255, nullable=false, options={"fixed"=true})
-     * @Assert\Regex("/<(\/?iframe)(.|\n)*?>/")
      */
     private $embed;
 

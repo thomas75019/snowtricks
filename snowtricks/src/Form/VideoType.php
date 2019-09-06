@@ -7,14 +7,20 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class VideoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('embed', TextareaType::class, [
-                'label' => 'Balise embed de la vidéo'
+            ->add('embed', TextType::class, [
+                'label' => 'Balise Iframe de la vidéo',
+                'attr' => [
+                    'pattern' => '(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))',
+                    'title' => 'Balise Iframe valide'
+                ]
+
             ])
         ;
     }
