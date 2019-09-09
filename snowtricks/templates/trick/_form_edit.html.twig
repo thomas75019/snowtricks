@@ -2,19 +2,22 @@
     {% if images and videos %}
         <div class="row">
             {% for image in images %}
-                <figure class="col-md-4">
+                <div class="col-sm-4">
                     <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
-                </figure>
-                {% include 'image/_delete_form.html.twig' %}
+                    {% include 'image/_delete_form.html.twig' %}
+                </div>
             {% endfor %}
             {% for video in videos %}
-                <figure class="col-md-4">
+                <div class="col-sm-4">
                     {{ video.embed|raw }}
-                </figure>
-                {% include 'video/_delete_form.html.twig' %}
+                    {% include 'video/_delete_form.html.twig' %}
+                </div>
             {% endfor %}
         </div>
     {% endif %}
+</div>
+
+<div class="container">
     <div id="form-content" class="col-lg-8 col-md-8 col-xs-10 ">
         {{ form_start(form) }}
         <div class="row">

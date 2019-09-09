@@ -35,14 +35,14 @@
         <div class="container" id="medias">
                 <div class="row">
                     {% for image in images %}
-                        <figure class="col-md-4">
+                        <div class="col-sm-4">
                             <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
-                        </figure>
+                        </div>
                     {% endfor %}
                     {% for video in videos %}
-                        <figure class="col-md-4">
+                        <div class="col-sm-4">
                             {{ video.embed|raw }}
-                        </figure>
+                        </div>
                     {% endfor %}
                 </div>
         </div>
