@@ -84,16 +84,22 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @param Request          $request Request
+     * @param SessionInterface $session Session
+     * @param \Swift_Mailer    $mailer  Swift Mailer
+     *
+     * @return RedirectResponse
+     *
      * @Route("/security/new-password", name="reinitialise_password_email", methods={"POST"})
      */
     public function sendReinitialisePassword(Request $request, SessionInterface $session, \Swift_Mailer $mailer)
     {
-        $email = $request->request->get('email');
+        $email = $request->get('email');
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (!$user)
         {
-            $this->addFlash('notice', 'L\'email n\'est liée avec aucun compte');
+            $this->addFlash('info', 'L\'email n\'est liée avec aucun compte');
             return $this->redirectToRoute('lost_password');
         }
 
@@ -103,16 +109,16 @@ class SecurityController extends AbstractController
 
         $body = $this->renderView('security/change_password.html.twig',
             [
-                'token' => $session->get('token'),
+                'token' => $token,
                 'id' => $user->getId()
             ]
         );
 
-        $email = new SecurityEmail($mailer, $user->getEmail(), $body, 'Réinitialisé votre mot de passe');
+        $mail = new SecurityEmail($mailer, $user->getEmail(), $body, 'Réinitialisé votre mot de passe');
 
-        $email->send();
+        $mail->send();
 
-        $this->addFlash('notice', 'Un email pour réinitialiser votre mot de passe a été envoyé');
+        $this->addFlash('info', 'Un email pour réinitialiser votre mot de passe a été envoyé');
 
         return $this->redirectToRoute('index');
     }
@@ -131,29 +137,22 @@ class SecurityController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)
             ->findOneBy(['id' => $request->get('id')]);
 
-        /*if ($request->isMethod('post'))
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-            $user->setPassword($request->get('newPassword'));
-            $entityManager->flush();
-
-            $session->remove('token');
-
-            $this->addFlash('success', 'Votre mot de passe a bien été changé');
-
-            return $this->redirectToRoute('trick_index');
-
-        }*/
-        if ($session->get('token') === $token && $request->isMethod('get'))
+        if ($session->get('token') === $token)
         {
             return $this->render('security/change_password_form.html.twig', ['token' => $token, 'id' => $user->getId()]);
         }
 
-        return $this->redirectToRoute('lost_password');
+        $session->remove('token');
+
+        $this->addFlash('error', 'Une erreur s\'est produite');
+        return $this->redirectToRoute('trick_index');
     }
 
 
     /**
+     * @param SessionInterface             $session         Session Interface
+     * @param Request                      $request         Request
+     * @param UserPasswordEncoderInterface $passwordEncoder Password Encoder Interface
      * @return RedirectResponse
      *
      * @Route("/new/password/{id}", name="new_password", methods={"POST"})
@@ -178,11 +177,10 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('index');
 
         }
+        $session->remove('token');
+        $this->addFlash('error', 'Une erreur s\'est produite');
 
-
-        $this->addFlash('erreur', 'erreur');
-
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('trick_index');
     }
 
 

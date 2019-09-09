@@ -117,10 +117,7 @@ class TrickController extends AbstractController
             ]
         );
 
-        foreach ($videos as $video)
-        {
-            dump($video->getId());
-        }
+        dump($message);
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'messages' => $messages,

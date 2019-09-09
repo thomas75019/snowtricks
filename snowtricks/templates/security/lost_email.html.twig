@@ -1,5 +1,42 @@
-<form action="/security/new-password" method="post">
-    <label for="email">Votre email</label>
-    <input type="email" title="email" name="email" />
-    <button type="submit">Réinitialiser votre mot de passe</button>
-</form>
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Changer son mot de passe{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/new-form.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block header %}
+    <div id="headerwrap" class="top">
+        <div class="container">
+            <div class="row centered">
+                <div class="col-lg-8 col-lg-offset-2 mt">
+                    <h1 class="animation slideDown" style="color:black;">SNOWTRICKS</h1>
+                    <p style="font-size: 20px;color: black">SITE COMMUNAUTAIRE POUR TOUT LES AMOUREUX DU SNOWBOARD</p>
+                    <p style="color: white;">Par Jimmy Sweat</p>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /headerwrap -->
+{% endblock %}
+
+{% block body %}
+    <h1>Mot de passe oublié</h1>
+
+    <div class="container">
+        <div id="form-content"  class="col-lg-8 col-md-8 col-xs-10 ">
+            <form name="registration_form" method="post" action="/security/new-password">
+                <div class="row">
+                    <div class="col-lg-12"><div class="form-group"><label for="email" class="required">Votre Email</label><input type="email" id="email" name="email" required="required" class="form-control" /></div></div>
+                </div>
+                <button class="btn btn-info" type="submit" id="add-register">Réinitialisez votre mot de passe</button><br>
+            </form>
+        </div>
+    </div>
+{% endblock %}
