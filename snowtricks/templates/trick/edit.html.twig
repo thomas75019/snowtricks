@@ -5,6 +5,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('assets/css/new-form.css') }}" rel="stylesheet">
+
 {% endblock %}
 
 {% block body %}
@@ -16,4 +17,7 @@
 {% block footer %}
     {{ parent() }}
     <script src="{{ asset('assets/js/mediasManagement.js') }}"></script>
+    <script>
+        $('#trick_images').remove();
+    </script>
 {% endblock %}

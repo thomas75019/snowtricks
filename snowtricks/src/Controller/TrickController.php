@@ -180,15 +180,12 @@ class TrickController extends AbstractController
         $images_path = $this->getParameter('images_path');
         $images = $trick->getImages();
         $videos = $trick->getVideos();
-
         if ($form->isSubmitted() && $form->isValid()) {
             $imagesHandler->addImages($trick, $images_path);
             $videoHandler->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('index');
         }
-
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
             'images' => $images,
