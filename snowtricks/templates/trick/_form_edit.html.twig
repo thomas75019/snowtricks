@@ -11,6 +11,7 @@
                 <figure class="col-md-4">
                     {{ video.embed|raw }}
                 </figure>
+                {% include 'video/_delete_form.html.twig' %}
             {% endfor %}
         </div>
     {% endif %}
