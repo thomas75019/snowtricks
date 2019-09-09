@@ -158,9 +158,10 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @param Request      $request Request
-     * @param Trick        $trick   Trick entity
-     * @param VideoHandler $video   Video Handler
+     * @param Request       $request       Request
+     * @param Trick         $trick         Trick entity
+     * @param VideoHandler  $videoHandler  Video Handler
+     * @param ImagesHandler $imagesHandler Images Handler
      *
      * @return Response
      *
