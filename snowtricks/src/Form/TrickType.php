@@ -19,7 +19,9 @@ class TrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'label' => 'Nom du trick'
+            ])
             ->add('description', TextareaType::class)
             ->add('category', EntityType::class, [
                 'class' => Category::class,
