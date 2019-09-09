@@ -19,8 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Json;
-use DateTime;
 
 /**
  * @Route("/trick")
@@ -160,22 +158,27 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @param Request      $request Request
-     * @param Trick        $trick   Trick entity
-     * @param VideoHandler $video   Video Handler
+     * @param Request       $request       Request
+     * @param Trick         $trick         Trick entity
+     * @param VideoHandler  $videoHandler  Video Handler
+     * @param ImagesHandler $imagesHandler Images Handler
      *
      * @return Response
      *
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Trick $trick, VideoHandler $video): Response
+    public function edit(Request $request, Trick $trick, VideoHandler $videoHandler, ImagesHandler $imagesHandler): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
+        $images_path = $this->getParameter('images_path');
+        $images = $trick->getImages();
+        $videos = $trick->getVideos();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $video->addVideos($trick);
+            $imagesHandler->addImages($trick, $images_path);
+            $videoHandler->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('index');
@@ -183,6 +186,8 @@ class TrickController extends AbstractController
 
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
+            'images' => $images,
+            'videos' => $videos,
             'form' => $form->createView(),
         ]);
     }
