@@ -3,6 +3,7 @@
 namespace App\Service\Handler;
 
 use App\Entity\Trick;
+use App\Entity\User;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -48,6 +49,26 @@ class ImagesHandler
             }
         }
         return;
+    }
+
+    /**
+     * @param User       $user User
+     * @param Filesystem $file File
+     * @param string     $avatar_path Avatar path
+     */
+    public function addAvatar(User $user, $file, $avatar_path)
+    {
+        if ($file) {
+            $newFilename = $user->getName() . '-' . uniqid() . '-avatar.' . $file->guessExtension();
+
+            $file->move(
+                $avatar_path,
+                $newFilename
+            );
+
+
+            $user->setPhoto($newFilename);
+        }
     }
 
 

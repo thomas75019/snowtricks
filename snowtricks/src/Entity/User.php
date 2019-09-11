@@ -77,7 +77,7 @@ class User implements UserInterface
     {
         $this->is_activated = false;
         $this->activation_token = md5(uniqid());
-        $this->photo = 'test';
+        $this->photo = 'default-avatar.png';
     }
 
     /**
