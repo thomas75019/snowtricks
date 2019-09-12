@@ -51,11 +51,13 @@
         <div class="row mt" id="new_tricks">
         </div>
         <!-- col-lg-4 -->
-        <div class="row centered" id="button_show_more">
-            <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus</button>
-        </div>
     </div>
 </div>
+    {% if tricks|length == 6 %}
+    <div class="row centered" id="button_show_more">
+        <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus</button>
+    </div>
+    {% endif %}
 
 {% endblock %}
 
@@ -77,6 +79,7 @@
                     },
                     error : function (error) {
                         alert(error);
+                        console.log(data)
                     },
 
 
@@ -101,13 +104,5 @@
                 return false;
             });
         })
-
-
-
-
-
-
-
-
     </script>
 {% endblock %}

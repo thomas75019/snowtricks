@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/trick")
+ * @Route("/")
  */
 class TrickController extends AbstractController
 {
@@ -218,7 +218,7 @@ class TrickController extends AbstractController
      * @param Request         $request    ServerRequest
      *
      * @return Response
-     * @Route("/show_more/{id}", name="show_more")
+     * @Route("/trick/show_more/{id}", name="show_more")
      */
     public function showMore(TrickRepository $repository, Request $request)
     {

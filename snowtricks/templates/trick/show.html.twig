@@ -14,7 +14,7 @@
                 {% block nav %}
                     {{ parent() }}
                 {% endblock %}
-                <div class="col-lg-8 col-lg-offset-2 mt">
+                <div class="col-lg-8 col-lg-offset-2 mt" id="title">
                     <h1 class="animation slideDown" style="color:black;">{{ trick.name|upper }}</h1>
                     <em style="font-size: 30px;">{{ trick.category.name }}</em>
                 </div>
@@ -38,7 +38,7 @@
         <div class="container" id="medias">
                 <div class="row">
                     {% for image in images %}
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 col-lg-12 photo">
                             <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
                         </div>
                     {% endfor %}
@@ -49,6 +49,8 @@
                     {% endfor %}
                 </div>
         </div>
+
+        <button type="button" class="btn btn-info" id="see-medias" style="display: none">Voir les medias</button>
 
         <div class="container">
             <div class="row mt">
@@ -133,6 +135,15 @@
                 });
 
             });
+
+            $(document).on('click','#see-medias', function () {
+                const see_medias = $('#see-medias');
+                if (see_medias.text() === 'Voir les medias')
+                {
+                    $('#medias').css('display', 'block');
+                    see_medias.remove()
+                }
+            })
         })
     </script>
 {% endblock %}
