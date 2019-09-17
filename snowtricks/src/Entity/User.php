@@ -76,7 +76,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->is_activated = false;
-        $this->activation_token = md5(uniqid());
+        $this->activation_token = hash('sha256', uniqid());
         $this->photo = 'default-avatar.png';
     }
 

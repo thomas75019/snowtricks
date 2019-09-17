@@ -103,7 +103,7 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('lost_password');
         }
 
-        $token = md5(uniqid());
+        $token = hash('sha256', uniqid());
 
         $session->set('token', $token);
 

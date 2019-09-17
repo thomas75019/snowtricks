@@ -34,7 +34,7 @@ class TrickController extends AbstractController
     {
         $tricks = $this->getDoctrine()
             ->getRepository(Trick::class)
-            ->findBy([], ['id' => 'DESC'], $limit = 6 , $offset = 0);
+            ->findBy([], ['id' => 'DESC'], 6);
 
         return $this->render('trick/index.html.twig', [
             'tricks' => $tricks,
@@ -104,7 +104,7 @@ class TrickController extends AbstractController
             [
                 'id' => 'DESC'
             ],
-            $limit = 4
+             4
         );
 
         $form = $this->createForm(MessageType::class, $message,
