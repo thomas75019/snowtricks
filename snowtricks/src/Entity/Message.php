@@ -38,10 +38,9 @@ class Message
     /**
      * @var \Trick
      *
-     * @ORM\ManyToOne(targetEntity="Trick")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="trick_id", referencedColumnName="id")
-     * })
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="messages", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 

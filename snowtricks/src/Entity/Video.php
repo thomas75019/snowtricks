@@ -24,17 +24,13 @@ class Video
     /**
      * @var string
      *
-     * @ORM\Column(name="embed", type="string", length=1, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="embed", type="string", length=255, nullable=false, options={"fixed"=true})
      */
     private $embed;
 
     /**
-     * @var \Trick
-     *
-     * @ORM\ManyToOne(targetEntity="Trick")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="trick_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="videos")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
 
