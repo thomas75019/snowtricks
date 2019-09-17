@@ -38,12 +38,12 @@
         <div class="container" id="medias">
                 <div class="row">
                     {% for image in images %}
-                        <div class="col-sm-4 col-lg-12 photo">
+                        <div class="col-sm-4 photo">
                             <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
                         </div>
                     {% endfor %}
                     {% for video in videos %}
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 video">
                             {{ video.embed|raw }}
                         </div>
                     {% endfor %}

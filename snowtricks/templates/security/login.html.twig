@@ -47,6 +47,12 @@
                 <input type="hidden" name="_csrf_token"
                        value="{{ csrf_token('authenticate') }}">
             </form>
+            <p>
+                <br>
+                Pas encore inscrit? Inscrivez-vous <a href="{{ path('app_register') }}">Ici</a>
+                <br>
+                Mot de passe oublié? Consultez cette <a href="{{ path('lost_password') }}">page</a>
+            </p>
         </div>
     </div>
 
