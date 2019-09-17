@@ -17,10 +17,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/")
+ * @Route("/trick")
  */
 class TrickController extends AbstractController
 {
@@ -33,11 +34,10 @@ class TrickController extends AbstractController
     {
         $tricks = $this->getDoctrine()
             ->getRepository(Trick::class)
-            ->findBy([], ['id' => 'DESC'], $limit = 10 , $offset = 0);
-
+            ->findBy([], ['id' => 'DESC'], $limit = 6 , $offset = 0);
 
         return $this->render('trick/index.html.twig', [
-            'tricks' => $tricks
+            'tricks' => $tricks,
         ]);
     }
 
@@ -76,7 +76,7 @@ class TrickController extends AbstractController
 
             $this->addFlash('success', 'Le nouveau trick à bien été ajouté');
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('trick/new.html.twig', [
@@ -94,6 +94,8 @@ class TrickController extends AbstractController
      */
     public function show(Trick $trick): Response
     {
+        $images = $trick->getImages();
+        $videos = $trick->getVideos();
         $message = new Message();
         $messages = $this->getDoctrine()->getRepository(Message::class)->findBy(
             [
@@ -101,7 +103,8 @@ class TrickController extends AbstractController
             ],
             [
                 'id' => 'DESC'
-            ]
+            ],
+            $limit = 4
         );
 
         $form = $this->createForm(MessageType::class, $message,
@@ -116,6 +119,8 @@ class TrickController extends AbstractController
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'messages' => $messages,
+            'images' => $images,
+            'videos' => $videos,
             'form' => $form->createView()
         ]);
     }
@@ -124,6 +129,7 @@ class TrickController extends AbstractController
 
     /**
      * @var Request $request
+     * @var Trick   $trick
      *
      * @return Response
      *
@@ -152,28 +158,36 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @var Request $request Request
-     * @var Trick   $trick   Trick entity
+     * @param Request       $request       Request
+     * @param Trick         $trick         Trick entity
+     * @param VideoHandler  $videoHandler  Video Handler
+     * @param ImagesHandler $imagesHandler Images Handler
      *
      * @return Response
      *
      * @Route("/{id}/edit", name="trick_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Trick $trick, VideoHandler $video): Response
+    public function edit(Request $request, Trick $trick, VideoHandler $videoHandler, ImagesHandler $imagesHandler): Response
     {
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
+        $images_path = $this->getParameter('images_path');
+        $images = $trick->getImages();
+        $videos = $trick->getVideos();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $video->addVideos($trick);
+            $imagesHandler->addImages($trick, $images_path);
+            $videoHandler->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
+            'images' => $images,
+            'videos' => $videos,
             'form' => $form->createView(),
         ]);
     }
@@ -185,7 +199,7 @@ class TrickController extends AbstractController
      *
      * @return RedirectResponse
      *
-     * @Route("/{id}", name="trick_delete", methods={"DELETE"})
+     * @Route("/supprimer/{id}", name="trick_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Trick $trick, ImagesHandler $handler): RedirectResponse
     {
@@ -197,30 +211,24 @@ class TrickController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('index');
     }
 
     /**
+     * @param TrickRepository $repository Trick repository
+     * @param Request         $request    ServerRequest
+     *
+     * @return Response
      * @Route("/show_more/{id}", name="show_more")
      */
     public function showMore(TrickRepository $repository, Request $request)
     {
         $last_id = $request->get('id');
         $tricks = $repository->showMore($last_id);
+        $size = count($tricks);
 
-        $json = array();
-        $index = 0;
-        foreach ($tricks as $trick)
-        {
-            $temp = array(
-                'id' => $trick->getId(),
-                'name' => $trick->getName(),
-            );
 
-            $json[$index++] = $temp;
-
-        }
-       return new JsonResponse($json);
+       return $this->render('trick/new_trick.html.twig', ['tricks' => $tricks, 'size' => $size]);
     }
 
 

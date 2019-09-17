@@ -2,6 +2,27 @@
 
 {% block title %}New Trick{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/new-form.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+    <div id="headerwrap" class="top">
+        <div class="container">
+            <div class="row centered">
+                <div class="col-lg-8 col-lg-offset-2 mt">
+                    <h1 class="animation slideDown" style="color:black;">SNOWTRICKS</h1>
+                    <p style="color: white;">Par Jimmy Sweat</p>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /headerwrap -->
+{% endblock %}
+
 {% block body %}
     <h1>Create new Trick</h1>
 
@@ -9,4 +30,9 @@
     {{ include('trick/_form.html.twig') }}
 
     <a href="{{ path('trick_index') }}">back to list</a>
+{% endblock %}
+
+{% block footer %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/mediasManagement.js') }}"></script>
 {% endblock %}

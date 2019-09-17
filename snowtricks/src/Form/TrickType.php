@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Trick;
+use function PHPSTORM_META\type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -18,6 +21,11 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('description', TextareaType::class)
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'label' => 'Catégorie'
+                ])
             ->add('images', CollectionType::class, [
                 'entry_type' => ImageType::class,
                 'entry_options' => ['label' => false],

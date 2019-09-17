@@ -1,0 +1,23 @@
+{% for message in messages %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="author-bio media">
+                    <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('assets/img/to_top.png') }}" alt="Avatar"></div><!-- /.author-avatar -->
+                    <div class="author-details media-body">
+                        <h3 class="name">{{ message.user.name }}</h3>
+                        <span>Posté le {{ message.createdAt|date('d/m/Y') }}</span>
+                        <p>
+                            {{ message.content }}
+                        </p>
+                        <div class=".id" style="display: none">{{ message.id }}</div>
+                    </div><!-- /.author-details -->
+                </div><!-- /.author-bio -->
+            </div>
+        </div>
+    </div>
+    <div class="id" style="display: none">{{ message.id }}</div>
+{% endfor %}
+{% if size == 4 %}
+    <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black; margin-right: 50% ">Voir plus</button>
+{% endif %}

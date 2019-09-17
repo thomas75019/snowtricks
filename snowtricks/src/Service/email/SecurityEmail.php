@@ -5,11 +5,11 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use function Symfony\Component\Debug\Tests\testHeader;
 
 /**
- * Class ActivationEmail
+ * Class SecurityEmail
  *
  * @package App\Service\email
  */
-class ActivationEmail
+class SecurityEmail
 {
     /**
      * @var $this
@@ -22,16 +22,17 @@ class ActivationEmail
     private $mailer;
 
     /**
-     * ActivationEmail constructor.
+     * SecurityEmail constructor.
      *
      * @param \Swift_Mailer $mailer
      * @param string        $email
      * @param string        $body
+     * @param string        $subject
      */
-    public function __construct(\Swift_Mailer $mailer, $email, $body)
+    public function __construct(\Swift_Mailer $mailer, $email, $body, $subject)
     {
         $this->mailer = $mailer;
-        $this->message = (new \Swift_Message('Activate you account'))
+        $this->message = (new \Swift_Message($subject))
             ->setFrom('tlarousse3@gmail.com')
             ->setTo($email)
             ->setBody($body, 'text/html');
@@ -40,7 +41,7 @@ class ActivationEmail
     /**
      * Send the email
      */
-    public function sendActivationEmail()
+    public function send()
     {
         $this->mailer->send($this->message);
     }

@@ -84,6 +84,12 @@ class Trick
     private $messages;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Category", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+    /**
      * @return mixed
      */
     public function getMessages()
@@ -266,6 +272,18 @@ class Trick
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

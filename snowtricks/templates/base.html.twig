@@ -1,31 +1,103 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="{{ trick is defined ? trick.description : 'Snowtricks: le site communautaire pour les amoureux du snowboard par Jimmy Sweat' }}">
         <title>{% block title %}Snowtricks{% endblock %}</title>
         {% block stylesheets %}
-            <!-- Bootstrap core CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-            <script
-                    src="https://code.jquery.com/jquery-3.4.1.min.js"
-                    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-                    crossorigin="anonymous"></script>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="apple-touch-icon" href="{{ asset('img/apple-touch-icon.png') }}">
+
+            <!-- Google Fonts -->
+            <link href="https://fonts.googleapis.com/css?family=Ruda:400,900,700" rel="stylesheet">
+
+            <!-- Bootstrap CSS File -->
+            <link href="{{ asset('assets/lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+            <!-- Libraries CSS Files -->
+            <link href="{{ asset('assets/lib/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/lib/animations/animations.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/lib/hover-pack/hover-pack.css') }}" rel="stylesheet">
+
+            <!-- Main Stylesheet File -->
+            <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+            <link href="{{ asset('assets/css/colors/color-74c9be.css') }}" rel="stylesheet">
+
+            <!-- To top button-->
+            <link href="{{ asset('assets/css/top.css') }}" rel="stylesheet">
+
+            <!-- =======================================================
+              Template Name: Marco
+              Template URL: https://templatemag.com/marco-bootstrap-agency-template/
+              Author: TemplateMag.com
+              License: https://templatemag.com/license/
+            ======================================================= -->
         {% endblock %}
     </head>
     <body>
         {% block flash %}
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="flash-{{ label }}">
+                    <div class="alert alert-{{ label }} alert-dismissible">
                         {{ message }}
                     </div>
                 {% endfor %}
             {% endfor %}
         {% endblock %}
+
+        {% block header %}
+            <div id="headerwrap" class="top">
+                <div class="container">
+                    <div class="row centered">
+                        <div class="col-lg-8 col-lg-offset-2 mt">
+                            <h1 class="animation slideDown" style="color:black;">SNOWTRICKS</h1>
+                            <p style="font-size: 20px;color: black">SITE COMMUNAUTAIRE POUR TOUT LES AMOUREUX DU SNOWBOARD</p>
+                            <p style="color: white;">Par Jimmy Sweat</p>
+                            <p class="mt"><a href="#tricks"> <button type="button" class="btn btn-cta btn-lg">VOIR LES TRICKS</button></a></p>
+                        </div>
+                    </div>
+                    <!-- /row -->
+                </div>
+                <!-- /container -->
+            </div>
+            <!-- /headerwrap -->
+        {% endblock %}
+
         {% block body %}
 
         {% endblock %}
-        {% block javascripts %}
+
+
+        {% block footer %}
+        <div id="copyrights">
+            <div class="container">
+                <p>
+                    &copy; Copyrights <strong>Marco</strong>. All Rights Reserved
+                </p>
+                <div class="credits">
+                    <!--
+                      You are NOT allowed to delete the credit link to TemplateMag with free version.
+                      You can delete the credit link only if you bought the pro version.
+                      Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/marco-bootstrap-agency-template/
+                      Licensing information: https://templatemag.com/license/
+                    -->
+                    Created with Marco template by <a href="https://templatemag.com/">TemplateMag</a>
+                </div>
+            </div>
+        </div>
+        <!-- / copyrights -->
+
+        <!-- JavaScript Libraries -->
+        <script src="{{ asset('assets/lib/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('assets/lib/php-mail-form/validate.js') }}"></script>
+        <script src="{{ asset('assets/lib/hover-pack/hover-pack.js') }}"></script>
+
+        <!-- Template Main Javascript File -->
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+
+
 
         {% endblock %}
     </body>
