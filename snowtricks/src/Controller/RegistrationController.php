@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use App\Service\email\SecurityEmail;
+use App\Service\Handler\ImagesHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,8 @@ class RegistrationController extends AbstractController
         UserPasswordEncoderInterface $passwordEncoder,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
-        \Swift_Mailer $mailer
+        \Swift_Mailer $mailer,
+        ImagesHandler $avatar
     ): Response
     {
         $user = new User();
@@ -54,6 +56,12 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            $avatar_path = $this->getParameter('avatar_path');
+            $file = $form['photo']->getData();
+            $avatar->addAvatar($user, $file ,$avatar_path);
+
+
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -76,6 +84,8 @@ class RegistrationController extends AbstractController
                 'main' // firewall name in security.yaml
             );
         }
+
+        dump($user);
         
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),

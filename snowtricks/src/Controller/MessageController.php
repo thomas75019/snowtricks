@@ -30,8 +30,7 @@ class MessageController extends AbstractController
                     'trick' => $trick
                 ],
                 'DESC',
-                $limit = 4,
-                $offset = 0
+                4
             );
 
         return $messages;

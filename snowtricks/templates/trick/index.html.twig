@@ -24,7 +24,7 @@
          {% for trick in tricks %}
              {% set firstImage = trick.images|first %}
              {% set firstImagePath = firstImage ? firstImage.name : ' ' %}
-        <div class="col-lg-4 col-md-4 col-xs-12 desc">
+        <div class="col-lg-4 col-md-4 col-xs-6 desc">
             <a class="b-link-fade b-animate-go" href="{{ path('trick_show', {'slug': trick.slug}) }}"><img width="350" height="250" src="{{ asset('uploads/images/' ~ firstImagePath) }}" alt="{{ trick.name }} - image à la une" />
                 <div class="b-wrapper">
                     <h4 class="b-from-left b-animate b-delay03">{{ trick.name }}</h4>
@@ -51,11 +51,13 @@
         <div class="row mt" id="new_tricks">
         </div>
         <!-- col-lg-4 -->
-        <div class="row centered" id="button_show_more">
-            <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus</button>
-        </div>
     </div>
 </div>
+    {% if tricks|length == 6 %}
+    <div class="row centered" id="button_show_more">
+        <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus</button>
+    </div>
+    {% endif %}
 
 {% endblock %}
 
@@ -77,6 +79,7 @@
                     },
                     error : function (error) {
                         alert(error);
+                        console.log(data)
                     },
 
 
@@ -101,13 +104,5 @@
                 return false;
             });
         })
-
-
-
-
-
-
-
-
     </script>
 {% endblock %}

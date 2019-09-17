@@ -11,6 +11,9 @@
     <div id="headerwrap" class="top">
         <div class="container">
             <div class="row centered">
+                {% block nav %}
+                    {{ parent() }}
+                {% endblock %}
                 <div class="col-lg-8 col-lg-offset-2 mt">
                     <h1 class="animation slideDown" style="color:black;">SNOWTRICKS</h1>
                     <p style="color: white;">Par Jimmy Sweat</p>

@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/trick")
+ * @Route("/")
  */
 class TrickController extends AbstractController
 {
@@ -34,7 +34,7 @@ class TrickController extends AbstractController
     {
         $tricks = $this->getDoctrine()
             ->getRepository(Trick::class)
-            ->findBy([], ['id' => 'DESC'], $limit = 6 , $offset = 0);
+            ->findBy([], ['id' => 'DESC'], 6);
 
         return $this->render('trick/index.html.twig', [
             'tricks' => $tricks,
@@ -104,7 +104,7 @@ class TrickController extends AbstractController
             [
                 'id' => 'DESC'
             ],
-            $limit = 4
+             4
         );
 
         $form = $this->createForm(MessageType::class, $message,
@@ -116,6 +116,8 @@ class TrickController extends AbstractController
                 )
             ]
         );
+
+        dump($message);
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'messages' => $messages,
@@ -175,15 +177,12 @@ class TrickController extends AbstractController
         $images_path = $this->getParameter('images_path');
         $images = $trick->getImages();
         $videos = $trick->getVideos();
-
         if ($form->isSubmitted() && $form->isValid()) {
             $imagesHandler->addImages($trick, $images_path);
             $videoHandler->addVideos($trick);
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('index');
         }
-
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
             'images' => $images,
@@ -219,7 +218,7 @@ class TrickController extends AbstractController
      * @param Request         $request    ServerRequest
      *
      * @return Response
-     * @Route("/show_more/{id}", name="show_more")
+     * @Route("/trick/show_more/{id}", name="show_more")
      */
     public function showMore(TrickRepository $repository, Request $request)
     {

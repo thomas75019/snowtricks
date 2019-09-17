@@ -11,8 +11,12 @@
     <div id="headerwrap">
         <div class="container">
             <div class="row centered">
-                <div class="col-lg-8 col-lg-offset-2 mt">
+                {% block nav %}
+                    {{ parent() }}
+                {% endblock %}
+                <div class="col-lg-8 col-lg-offset-2 mt" id="title">
                     <h1 class="animation slideDown" style="color:black;">{{ trick.name|upper }}</h1>
+                    <em style="font-size: 30px;">{{ trick.category.name }}</em>
                 </div>
             </div>
             <!-- /row -->
@@ -34,17 +38,19 @@
         <div class="container" id="medias">
                 <div class="row">
                     {% for image in images %}
-                        <figure class="col-md-4">
+                        <div class="col-sm-4 photo">
                             <img src="{{ asset('uploads/images/' ~ image.name) }}" alt="{{ trick.name }} - image" width="300" height="200">
-                        </figure>
+                        </div>
                     {% endfor %}
                     {% for video in videos %}
-                        <figure class="col-md-4">
+                        <div class="col-sm-4 video">
                             {{ video.embed|raw }}
-                        </figure>
+                        </div>
                     {% endfor %}
                 </div>
         </div>
+
+        <button type="button" class="btn btn-info" id="see-medias" style="display: none">Voir les medias</button>
 
         <div class="container">
             <div class="row mt">
@@ -63,36 +69,44 @@
     <hr style="margin: 5% 25% 5% 25%; ">
 
 
-    {% include('message/new.html.twig') %}
 
+    {% if app.user%}
+        {% include('message/new.html.twig') %}
+    {% else %}
+        <div>
+            <p style="text-align: center; font-size: 20px">Veuillez vous <a href="{{ path('app_login') }}">Connecter</a> ou vous <a href="{{ path('app_register') }}">inscrire</a> pour poster un message</p>
+        </div>
+    {% endif %}
     <hr style="margin: 1% 25% 1% 25%; ">
 
-    {% for message in messages %}
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <div class="author-bio media">
-                        <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('assets/img/to_top.png') }}" alt="Avatar"></div><!-- /.author-avatar -->
-                        <div class="author-details media-body">
-                            <h3 class="name">{{ message.user.name }}</h3>
-                            <span>Posté le {{ message.createdAt|date('d/m/Y') }}</span>
-                            <p>
-                                {{ message.content }}
-                            </p>
-                        </div><!-- /.author-details -->
-                    </div><!-- /.author-bio -->
+        {% for message in messages %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="author-bio media">
+                            <div class="author-avatar media-left pull-left" id="avatar"><img class="img-circle" src="{{ asset('uploads/avatars/' ~ message.user.photo) }}" width="100" height="100"></div><!-- /.author-avatar -->
+                            <div class="author-details media-body">
+                                <h3 class="name">{{ message.user.name }}</h3>
+                                <span>Posté le {{ message.createdAt|date('d/m/Y') }}</span>
+                                <p>
+                                    {{ message.content }}
+                                </p>
+                            </div><!-- /.author-details -->
+                        </div><!-- /.author-bio -->
+                    </div>
                 </div>
             </div>
+            <div class="id" style="display: none">{{ message.id }}</div>
+        {% endfor %}
+        <div id="new_messages">
         </div>
-        <div class="id" style="display: none">{{ message.id }}</div>
-    {% endfor %}
-    <div id="new_messages">
-    </div>
-    {% if messages != null and messages|length == 4 %}
-    <div class="row" id="button_show_more" style="width: 100px;">
-        <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus de messages</button>
-    </div>
-    {% endif %}
+        {% if messages != null and messages|length == 4 %}
+            <div class="row" id="button_show_more" style="width: 100px;">
+                <button id="show_more" class="btn btn-cta btn-lg" style="border-color: black; color: black ">Voir plus de messages</button>
+            </div>
+        {% endif %}
+
+
 
 
 {% endblock %}
@@ -121,6 +135,15 @@
                 });
 
             });
+
+            $(document).on('click','#see-medias', function () {
+                const see_medias = $('#see-medias');
+                if (see_medias.text() === 'Voir les medias')
+                {
+                    $('#medias').css('display', 'block');
+                    see_medias.remove()
+                }
+            })
         })
     </script>
 {% endblock %}
