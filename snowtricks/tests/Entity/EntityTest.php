@@ -40,7 +40,6 @@ class EntityTest extends TestCase
         $this->assertIsArray($trick->getImages());
         $this->assertIsArray($trick->getVideos());
         $this->assertIsObject($trick->getCategory());
-
     }
 
     /** @test */

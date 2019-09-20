@@ -15,7 +15,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
-
 /**
  * Class RegistrationController
  *
@@ -34,16 +33,14 @@ class RegistrationController extends AbstractController
      *
      * @Route("/register", name="app_register")
      */
-    public function register
-    (
+    public function register(
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
         \Swift_Mailer $mailer,
         ImagesHandler $avatar
-    ): Response
-    {
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -59,7 +56,7 @@ class RegistrationController extends AbstractController
 
             $avatar_path = $this->getParameter('avatar_path');
             $file = $form['photo']->getData();
-            $avatar->addAvatar($user, $file ,$avatar_path);
+            $avatar->addAvatar($user, $file, $avatar_path);
 
 
 
@@ -67,7 +64,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $body = $this->renderView('email/activate_account.html.twig',
+            $body = $this->renderView(
+                'email/activate_account.html.twig',
                 [
                     'token' => $user->getActivationToken()
                 ]

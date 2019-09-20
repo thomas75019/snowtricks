@@ -104,12 +104,15 @@ class TrickController extends AbstractController
             [
                 'id' => 'DESC'
             ],
-             4
+            4
         );
 
-        $form = $this->createForm(MessageType::class, $message,
+        $form = $this->createForm(
+            MessageType::class,
+            $message,
             [
-                'action' => $this->generateUrl('message_new',
+                'action' => $this->generateUrl(
+                    'message_new',
                     [
                         'slug' => $trick->getSlug()
                     ]
@@ -227,8 +230,6 @@ class TrickController extends AbstractController
         $size = count($tricks);
 
 
-       return $this->render('trick/new_trick.html.twig', ['tricks' => $tricks, 'size' => $size]);
+        return $this->render('trick/new_trick.html.twig', ['tricks' => $tricks, 'size' => $size]);
     }
-
-
 }

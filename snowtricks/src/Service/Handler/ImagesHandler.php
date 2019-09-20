@@ -37,7 +37,7 @@ class ImagesHandler
     public function addImages(Trick $trick, $images_path) : void
     {
         foreach ($trick->getImages() as $image) {
-            if($image->getName() == null  && $image->getFile() != null){
+            if ($image->getName() == null  && $image->getFile() != null) {
                 $file = $image->getFile();
                 $fileName = $trick->getName(). '-'. uniqid() .'.'.$file->guessExtension();
                 $file->move(
@@ -86,5 +86,4 @@ class ImagesHandler
 
         return;
     }
-
 }

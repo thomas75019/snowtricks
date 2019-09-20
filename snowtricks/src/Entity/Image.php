@@ -106,6 +106,4 @@ class Image
     {
         $this->file = $file;
     }
-
-
 }

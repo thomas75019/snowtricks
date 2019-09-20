@@ -20,5 +20,4 @@ class Slugger
     {
         return str_replace(' ', '-', strtolower($titre));
     }
-
 }

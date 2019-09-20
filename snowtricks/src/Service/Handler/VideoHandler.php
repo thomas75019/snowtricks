@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Handler;
+
 use App\Entity\Trick;
 
 /**
@@ -25,5 +26,4 @@ class VideoHandler
 
         return;
     }
-
 }

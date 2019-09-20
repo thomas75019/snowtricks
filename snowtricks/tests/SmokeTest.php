@@ -2,9 +2,7 @@
 
 namespace App\Tests;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 
 class SmokeTest extends WebTestCase
 {
@@ -28,7 +26,6 @@ class SmokeTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertTrue($response->isSuccessful(), $response->getStatusCode());
-
     }
 
     public function provideUrls()
@@ -41,6 +38,4 @@ class SmokeTest extends WebTestCase
             'Trick Show More' => ['/trick/show_more/50']
         ];
     }
-
-
 }

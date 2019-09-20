@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Service\email\SecurityEmail;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * Class SecurityController
  *
@@ -80,7 +81,6 @@ class SecurityController extends AbstractController
     public function lostPassword() : Response
     {
         return $this->render('security/lost_email.html.twig');
-
     }
 
     /**
@@ -97,8 +97,7 @@ class SecurityController extends AbstractController
         $email = $request->get('email');
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
 
-        if (!$user)
-        {
+        if (!$user) {
             $this->addFlash('info', 'L\'email n\'est liée avec aucun compte');
             return $this->redirectToRoute('lost_password');
         }
@@ -107,7 +106,8 @@ class SecurityController extends AbstractController
 
         $session->set('token', $token);
 
-        $body = $this->renderView('security/change_password.html.twig',
+        $body = $this->renderView(
+            'security/change_password.html.twig',
             [
                 'token' => $token,
                 'id' => $user->getId()
@@ -137,8 +137,7 @@ class SecurityController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)
             ->findOneBy(['id' => $request->get('id')]);
 
-        if ($session->get('token') === $token)
-        {
+        if ($session->get('token') === $token) {
             return $this->render('security/change_password_form.html.twig', ['token' => $token, 'id' => $user->getId()]);
         }
 
@@ -162,8 +161,7 @@ class SecurityController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)
             ->findOneBy(['id' => $request->get('id')]);
 
-        if ($request->isMethod('post'))
-        {
+        if ($request->isMethod('post')) {
             $plainPassword = $request->request->get('newPassword');
             $newPassword = $passwordEncoder->encodePassword($user, $plainPassword);
             $entityManager = $this->getDoctrine()->getManager();
@@ -175,13 +173,10 @@ class SecurityController extends AbstractController
             $this->addFlash('success', 'Votre mot de passe a bien été changé');
 
             return $this->redirectToRoute('index');
-
         }
         $session->remove('token');
         $this->addFlash('error', 'Une erreur s\'est produite');
 
         return $this->redirectToRoute('trick_index');
     }
-
-
 }

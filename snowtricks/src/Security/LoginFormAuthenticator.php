@@ -76,8 +76,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password']))
-        {
+        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['password'])) {
             throw new CustomUserMessageAuthenticationException('Mauvais mot de passe.');
         }
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
@@ -90,7 +89,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         return new RedirectResponse($this->urlGenerator->generate('trick_index'));
-
     }
 
     protected function getLoginUrl()
