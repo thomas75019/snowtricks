@@ -58,7 +58,7 @@ class EntityTest extends TestCase
         $this->assertFalse($user->getIsActivated());
         $this->assertIsBool($user->getIsActivated());
         $this->assertIsString($user->getActivationToken());
-        $this->assertEquals('default-avatar.png', $user->getPhoto());
+        $this->assertEquals('default-avatar.jpg', $user->getPhoto());
     }
 
     /** @test */

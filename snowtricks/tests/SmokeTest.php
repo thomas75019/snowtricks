@@ -34,8 +34,8 @@ class SmokeTest extends WebTestCase
             'Trick Index' => ['/'],
             'Trick Show' => ['/test'],
             'New Trick' => ['/new'],
-            'Trick Edit' => ['/69/edit'],
-            'Trick Show More' => ['/trick/show_more/50']
+            'Trick Edit' => ['/80/edit'],
+            'Trick Show More' => ['/trick/show_more/74']
         ];
     }
 }

@@ -55,6 +55,7 @@ class User implements UserInterface
      */
     private $photo;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,7 +78,7 @@ class User implements UserInterface
     {
         $this->is_activated = false;
         $this->activation_token = hash('sha256', uniqid());
-        $this->photo = 'default-avatar.png';
+        $this->photo = 'default-avatar.jpg';
     }
 
     /**

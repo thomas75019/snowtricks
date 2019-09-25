@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use App\Service\email\SecurityEmail;
 use App\Service\Handler\ImagesHandler;
+use PHPUnit\Util\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,6 +29,7 @@ class RegistrationController extends AbstractController
      * @param GuardAuthenticatorHandler    $guardHandler    Guard Handler
      * @param LoginFormAuthenticator       $authenticator   Authenticator
      * @param \Swift_Mailer                $mailer          Mailer
+     * @param ImagesHandler                $avatar          Avadatar handler
      *
      * @return Response
      *
@@ -43,6 +45,7 @@ class RegistrationController extends AbstractController
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,9 +59,11 @@ class RegistrationController extends AbstractController
 
             $avatar_path = $this->getParameter('avatar_path');
             $file = $form['photo']->getData();
-            $avatar->addAvatar($user, $file, $avatar_path);
 
-
+            if (!is_string($file))
+            {
+                $avatar->addAvatar($user, $file, $avatar_path);
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -83,8 +88,6 @@ class RegistrationController extends AbstractController
             );
         }
 
-        dump($user);
-        
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);

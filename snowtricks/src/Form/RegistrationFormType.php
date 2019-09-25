@@ -48,17 +48,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Avatar',
                 'data_class' => null,
                 'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/jpg',
-                            'image/png'
-                        ],
-                        'mimeTypesMessage' => 'Merci d\'uploader un fichier au format JPEG, JPG ou PNG',
-                        ])
-                ],
+                'empty_data' => 'default-avatar.jpg'
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
