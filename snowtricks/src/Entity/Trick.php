@@ -7,6 +7,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Trick
@@ -27,6 +28,8 @@ class Trick
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
