@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message
@@ -22,6 +23,8 @@ class Message
     private $id;
 
     /**
+     * @Assert\Length(min=4, max=255)
+     *
      * @var string
      *
      * @ORM\Column(name="content", type="text", nullable=false)
