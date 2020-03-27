@@ -16,7 +16,7 @@ class SmokeTest extends WebTestCase
     public function pagesTest($url)
     {
         $this->client = static::createClient([], [
-            'PHP_AUTH_USER' => 'test01@test.com',
+            'PHP_AUTH_USER' => 'test01@test.fr',
             'PHP_AUTH_PW'   => 'test01',
         ]);
 
@@ -25,7 +25,7 @@ class SmokeTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertTrue($response->isSuccessful(), $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function provideUrls()
@@ -34,8 +34,9 @@ class SmokeTest extends WebTestCase
             'Trick Index' => ['/'],
             'Trick Show' => ['/test'],
             'New Trick' => ['/new'],
-            'Trick Edit' => ['/80/edit'],
-            'Trick Show More' => ['/trick/show_more/74']
+            'Trick Edit' => ['/2/edit'],
+            'Trick Show More' => ['/trick/show_more/2']
         ];
     }
+
 }
