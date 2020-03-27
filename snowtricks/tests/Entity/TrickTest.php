@@ -38,6 +38,10 @@ class TrickTest extends KernelTestCase
     public function testEntityIsValid()
     {
         $this->hasErrors($this->getEntity(), 0);
+        $this->assertInstanceOf(\DateTime::class, $this->getEntity()->getCreatedAt());
+        $this->assertInstanceOf(\DateTime::class, $this->getEntity()->getUpdatedAt());
+        $this->assertInstanceOf(User::class, $this->getEntity()->getUser());
+        $this->assertInstanceOf(Category::class, $this->getEntity()->getCategory());
     }
 
     public function testEntityIsNotValid()
