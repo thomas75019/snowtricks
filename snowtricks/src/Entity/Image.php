@@ -23,6 +23,8 @@ class Image
     private $id;
 
     /**
+     * @Assert\NotBlank
+     *
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
@@ -30,7 +32,6 @@ class Image
     private $name;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\File(mimeTypes={"images/gif", "images/jpeg", "images/jpg", "images/png"},
      *              mimeTypesMessage = "Veuillez choisir une image au  format gif, jpeg, jpg, png"
      * )
@@ -102,7 +103,7 @@ class Image
     /**
      * @param mixed $file
      */
-    public function setFile($file): void
+    public function setFile($file)
     {
         $this->file = $file;
     }
